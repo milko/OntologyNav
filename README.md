@@ -1,4 +1,4 @@
 OntologyNav
 ===========
 
-Ontology management web site.
+Ontology navigation and management web site.
