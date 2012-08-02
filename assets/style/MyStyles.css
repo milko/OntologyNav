@@ -1,0 +1,15 @@
+/*
+ * Custom brand color style.
+ */
+.navbar .MyBrandColor {
+	color:#ffe68e;
+}
+
+/*
+ * Custom selected tab color style.
+ */
+.navbar .nav .active > a, 
+.navbar .nav .active > a:hover {
+	color:#b8ebf3;
+	font-weight: bold;
+}

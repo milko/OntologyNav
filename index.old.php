@@ -54,7 +54,7 @@ try
 	 || (! array_key_exists( kDEFAULT_SESSION, $_SESSION )) )
 		$_SESSION[ kDEFAULT_SESSION ] = new CSessionMongoNeo4j();
 
-/*	
+	
 		//
 		// Create user 1.
 		//
@@ -65,48 +65,50 @@ try
 		$user->Email( 'm.skofic@cgiar.org' );
 		$user->Role( array( kROLE_FILE_IMPORT, kROLE_USER_MANAGE ), TRUE );
 		$user->Commit( $_SESSION[ kDEFAULT_SESSION ]->UsersContainer() );
-*/
+
 	//
 	// Handle user.
 	//
-	if( array_key_exists( 'code', $_REQUEST ) )
+	if( array_key_exists( kSESSION_PARAM_USER_CODE, $_REQUEST ) )
 	{
 		//
 		// Login.
 		//
-		if( array_key_exists( 'pass', $_REQUEST ) )
+		if( array_key_exists( kSESSION_PARAM_USER_PASS, $_REQUEST ) )
 		{
 			//
 			// Look for user.
 			//
 			$found
 				= $_SESSION[ kDEFAULT_SESSION ]
-					->Login( $_REQUEST[ 'code' ], $_REQUEST[ 'pass' ] );
+					->Login( $_REQUEST[ kSESSION_PARAM_USER_CODE ],
+							 $_REQUEST[ kSESSION_PARAM_USER_PASS ] );
 			if( $found )
 				$_SESSION[ kDEFAULT_SESSION ]->User( $found );
 		
 		} // Provided user password.
-		
-		//
-		// Reset.
-		//
-		elseif( ! strlen( $_REQUEST[ 'code' ] ) )
-			$_SESSION[ kDEFAULT_SESSION ]->User( FALSE );
 	
 	} // Provided user code.
 	
 	//
+	// Reset.
+	//
+	elseif( array_key_exists( kSESSION_PARAM_USER_LOGOUT, $_REQUEST ) )
+		$_SESSION[ kDEFAULT_SESSION ]->User( FALSE );
+	
+	//
 	// Load user.
 	//
-	if( array_key_exists( 'code', $_REQUEST )
-	 && array_key_exists( 'pass', $_REQUEST ) )
+	if( array_key_exists( kSESSION_PARAM_USER_CODE, $_REQUEST )
+	 && array_key_exists( kSESSION_PARAM_USER_PASS, $_REQUEST ) )
 	{
 		//
 		// Look for user.
 		//
 		$found
 			= $_SESSION[ kDEFAULT_SESSION ]
-				->Login( $_REQUEST[ 'code' ], $_REQUEST[ 'pass' ] );
+				->Login( $_REQUEST[ kSESSION_PARAM_USER_CODE ],
+						 $_REQUEST[ kSESSION_PARAM_USER_PASS ] );
 		if( $found )
 			$_SESSION[ kDEFAULT_SESSION ]
 				->User( $found );
@@ -144,6 +146,9 @@ catch( Exception $error )
 		</style>
 		<link href="http://resources.grinfo.net/Library/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
 		
+		<!-- My styles -->
+		<link href="assets/style/MyStyles.css" rel="stylesheet">
+		
 		<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
 		  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -167,6 +172,34 @@ catch( Exception $error )
 	<body>
 		
 		<!-- ------------------------------------------------------------------------- --
+		  -- MODAL LOGIN															   --
+		  -- ------------------------------------------------------------------------- -->
+		<div class="modal hide fade" id="LoginModal">
+			<form class="well form-inline" action="index.php" method="post">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h3>Login</h3>
+				</div>
+				<div class="modal-body">
+					<div class="input-prepend">
+						<span class="add-on"><i class="icon-envelope"></i></span><input name="<?= kSESSION_PARAM_USER_CODE ?>" class="span2" type="text" placeholder="User" \>
+					</div>
+					<br />
+					<div class="input-prepend">
+						<span class="add-on"><i class="icon-lock"></i></span><input name="<?= kSESSION_PARAM_USER_PASS ?>" class="span2" type="password" placeholder="Password">
+					</div>
+					<br />
+				</div>
+				<div class="modal-footer">
+					<a href="#" class="btn" data-dismiss="modal">Close</a>
+					<button class="btn-small btn-primary" type="submit">
+						<i class="icon-user icon-white"></i>Sign in
+					</button>
+				</div>
+			</form>
+		</div><!--/.LoginModal -->
+		
+		<!-- ------------------------------------------------------------------------- --
 		  -- NAVIGATION BAR															   --
 		  -- ------------------------------------------------------------------------- -->
 		<div class="navbar navbar-fixed-top">
@@ -178,84 +211,72 @@ catch( Exception $error )
 						<span class="icon-bar"></span>
 					</a>
 					
-		<!-- ------------------------------------------------------------------------- --
-		  -- PROJECT TITLE															   --
-		  -- ------------------------------------------------------------------------- -->
-					<a class="brand" href="#">Ontology Navigation & Management Portal</a>
+			<!-- --------------------------------------------------------------------- --
+			  -- PROJECT TITLE														   --
+			  -- --------------------------------------------------------------------- -->
+					<a class="brand MyBrandColor" href="#">Ontology Navigation & Management Portal</a>
 					
-		<!-- ------------------------------------------------------------------------- --
-		  -- LOGIN BUTTON															   --
-		  -- ------------------------------------------------------------------------- -->
+			<!-- --------------------------------------------------------------------- --
+			  -- LOGIN BUTTON														   --
+			  -- --------------------------------------------------------------------- -->
 					<div class="btn-group pull-right">
-						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-							<i class="icon-user"></i> <span data-bind="text: <?php echo( kSESSION_USER_NAME ); ?>"></span>
-							<span class="caret"></span>
-						</a>
-						<ul class="dropdown-menu" style="width: 240px">
 <?php
 	if( $_SESSION[ kDEFAULT_SESSION ]->User() === NULL )
 	{
 ?>
-							<form class="well form-inline" action="index.php" method="post">
-								<div class="input-prepend">
-									<span class="add-on"><i class="icon-envelope"></i></span><input name="code" class="span2" type="text" placeholder="User" \>
-								</div>
-								<br />
-								<div class="input-prepend">
-									<span class="add-on"><i class="icon-lock"></i></span><input name="pass" class="span2" type="password" placeholder="Password">
-								</div>
-								<br /><br />
-								<div class="input-prepend">
-									<button class="btn-mini btn-primary" type="submit">
-										<i class="icon-user icon-white"></i>
-										Sign in
-									</button>
-								</div>
-							</form>
+						<a class="btn" data-toggle="modal" href="#LoginModal" >
+							<span data-bind="text: <?php echo( kSESSION_USER_NAME ); ?>"></span>
+						</a>
 <?php
 	}
 	else
 	{
 ?>
+						<button class="btn btn-info"><i class="icon-user"></i> <span data-bind="text: <?php echo( kSESSION_USER_NAME ); ?>"></span></button>
+						<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu" style="width: 240px">
 							<li><a href="#">Profile</a></li>
 							<li class="divider"></li>
-							<li><a href="<?= kDEFAULT_HOME.'/index.php?code=' ?>">Sign Out</a></li>
+							<li><a href="<?= kDEFAULT_HOME.'index.php?'.kSESSION_PARAM_USER_LOGOUT ?>">Sign Out</a></li>
+						</ul>
 <?php
 	}
 ?>
-						</ul>
 					</div>
 					
 					<div class="nav-collapse">
 						<ul class="nav">
-		<!-- ------------------------------------------------------------------------- --
-		  -- HOME TAB																   --
-		  -- ------------------------------------------------------------------------- -->
-							<li class="active"><a href="#">Home</a></li>
 
-		<!-- ------------------------------------------------------------------------- --
-		  -- ABOUT TAB																   --
-		  -- ------------------------------------------------------------------------- -->
-							<li><a href="#about">About</a></li>
-
-		<!-- ------------------------------------------------------------------------- --
-		  -- CONTACT TAB															   --
-		  -- ------------------------------------------------------------------------- -->
-							<li><a href="#contact">Contact</a></li>
-							
-							<li class="divider-vertical"></li>
-
-		<!-- ------------------------------------------------------------------------- --
-		  -- SEARCH FIELD															   --
-		  -- ------------------------------------------------------------------------- -->
+			<!-- --------------------------------------------------------------------- --
+			  -- SEARCH FIELD														   --
+			  -- --------------------------------------------------------------------- -->
 							<form class="navbar-search pull-left">
 								<input type="text" class="search-query" placeholder="Search">
 							</form>
+
+			<!-- --------------------------------------------------------------------- --
+			  -- HOME TAB															   --
+			  -- --------------------------------------------------------------------- -->
+							<li class="active"><a class="MyActiveTabColor" href="#">Home</a></li>
+
+			<!-- --------------------------------------------------------------------- --
+			  -- ABOUT TAB															   --
+			  -- --------------------------------------------------------------------- -->
+							<li class=""><a href="#about">About</a></li>
+
+			<!-- --------------------------------------------------------------------- --
+			  -- CONTACT TAB														   --
+			  -- --------------------------------------------------------------------- -->
+							<li class=""><a href="#contact">Contact</a></li>
+							
+							<li class="divider-vertical"></li>
 						</ul>
 					</div><!--/.nav-collapse -->
-				</div>
-			</div>
-		</div>
+				</div><!--/.container-fluid -->
+			</div><!--/.navbar-inner -->
+		</div><!--/.navbar -->
 
 		<!-- ------------------------------------------------------------------------- --
 		  -- CONTENT																   --
