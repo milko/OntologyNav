@@ -54,7 +54,7 @@ try
 	 || (! array_key_exists( kDEFAULT_SESSION, $_SESSION )) )
 		$_SESSION[ kDEFAULT_SESSION ] = new CSessionMongoNeo4j();
 
-	
+/*	
 		//
 		// Create user 1.
 		//
@@ -65,6 +65,7 @@ try
 		$user->Email( 'm.skofic@cgiar.org' );
 		$user->Role( array( kROLE_FILE_IMPORT, kROLE_USER_MANAGE ), TRUE );
 		$user->Commit( $_SESSION[ kDEFAULT_SESSION ]->UsersContainer() );
+*/
 
 	//
 	// Handle user.
@@ -219,19 +220,16 @@ catch( Exception $error )
 			<!-- --------------------------------------------------------------------- --
 			  -- LOGIN BUTTON														   --
 			  -- --------------------------------------------------------------------- -->
-					<div class="btn-group pull-right">
-<?php
-	if( $_SESSION[ kDEFAULT_SESSION ]->User() === NULL )
-	{
-?>
+					<div data-bind="ifnot: <?= kSESSION_USER_LOGGED ?>" class="btn-group pull-right">
 						<a class="btn" data-toggle="modal" href="#LoginModal" >
 							<span data-bind="text: <?php echo( kSESSION_USER_NAME ); ?>"></span>
 						</a>
-<?php
-	}
-	else
-	{
-?>
+					</div><!--/.btn-group -->
+			  		
+			<!-- --------------------------------------------------------------------- --
+			  -- LOGGED BUTTON														   --
+			  -- --------------------------------------------------------------------- -->
+					<div data-bind="if: <?= kSESSION_USER_LOGGED ?>" class="btn-group pull-right">
 						<button class="btn btn-info"><i class="icon-user"></i> <span data-bind="text: <?php echo( kSESSION_USER_NAME ); ?>"></span></button>
 						<button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
 							<span class="caret"></span>
@@ -241,10 +239,7 @@ catch( Exception $error )
 							<li class="divider"></li>
 							<li><a href="<?= kDEFAULT_HOME.'index.php?'.kSESSION_PARAM_USER_LOGOUT ?>">Sign Out</a></li>
 						</ul>
-<?php
-	}
-?>
-					</div>
+					</div><!--/.btn-group -->
 					
 					<div class="nav-collapse">
 						<ul class="nav">
@@ -283,8 +278,8 @@ catch( Exception $error )
 		  -- ------------------------------------------------------------------------- -->
 		<div class="container-fluid">
 
-		  <h1>Bootstrap starter template</h1>
-		  <p>Use this document as a way to quick start any new project.<br> All you get is this message and a barebones HTML document.</p>
+			<h1>Bootstrap starter template</h1>
+			<p>Use this document as a way to quick start any new project.<br> All you get is this message and a barebones HTML document.</p>
 			
 			<hr>
 			
