@@ -24,9 +24,14 @@
 require_once( '/Library/WebServer/Library/wrapper/includes.inc.php' );
 
 //
-// Environment includes.
+// Server includes.
 //
-require_once( 'environment.inc.php' );
+require_once( '/Library/WebServer/Library/wrapper/local/server.inc.php' );
+
+//
+// Sites includes.
+//
+require_once( 'assets/settings/site.inc.php' );
 
 //
 // Class includes.
