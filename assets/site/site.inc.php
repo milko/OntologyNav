@@ -39,7 +39,7 @@ define( "kDEFAULT_PATH",			"/Library/WebServer/Sites/development/OntologyNav/" )
 define( "kDEFAULT_HOME",			"http://localhost/development/OntologyNav/" );
 
 /*=======================================================================================
- *	DEFAULT MODULE DEFINITION															*
+ *	SERVICE MODULE DEFINITION															*
  *======================================================================================*/
 
 /**

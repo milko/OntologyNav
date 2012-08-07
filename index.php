@@ -31,17 +31,12 @@ require_once( '/Library/WebServer/Library/wrapper/local/server.inc.php' );
 //
 // Sites includes.
 //
-require_once( 'assets/settings/site.inc.php' );
+require_once( 'assets/site/site.php' );
 
 //
 // Class includes.
 //
 require_once( kPATH_LIBRARY_SOURCE."CSessionMongoNeo4j.php" );
-
-//
-// Start session.
-//
-session_start();
 
 /*=======================================================================================
  *	LOAD SESSION																		*
@@ -55,71 +50,20 @@ try
 	//
 	// Initialise session.
 	//
-	if( (! isset( $_SESSION ))
-	 || (! array_key_exists( kDEFAULT_SESSION, $_SESSION )) )
-		$_SESSION[ kDEFAULT_SESSION ] = new CSessionMongoNeo4j();
-
-/*	
-		//
-		// Create user 1.
-		//
-		$user = new CUser();
-		$user->Code( 'Milko' );
-		$user->Password( 'Secret' );
-		$user->Name( 'Milko Škofič' );
-		$user->Email( 'm.skofic@cgiar.org' );
-		$user->Role( array( kROLE_FILE_IMPORT, kROLE_USER_MANAGE ), TRUE );
-		$user->Commit( $_SESSION[ kDEFAULT_SESSION ]->UsersContainer() );
-*/
+	Init_Session();
+	
+	//
+	// Ensure guest user.
+	// We only include this for debugging purposes,
+	// code is test and pass is pass.
+	// Omit this in production.
+	//
+	Init_Guest();
 
 	//
-	// Handle user.
+	// Handle login/logout.
 	//
-	if( array_key_exists( kSESSION_PARAM_USER_CODE, $_REQUEST ) )
-	{
-		//
-		// Login.
-		//
-		if( array_key_exists( kSESSION_PARAM_USER_PASS, $_REQUEST ) )
-		{
-			//
-			// Look for user.
-			//
-			$found
-				= $_SESSION[ kDEFAULT_SESSION ]
-					->Login( $_REQUEST[ kSESSION_PARAM_USER_CODE ],
-							 $_REQUEST[ kSESSION_PARAM_USER_PASS ] );
-			if( $found )
-				$_SESSION[ kDEFAULT_SESSION ]->User( $found );
-		
-		} // Provided user password.
-	
-	} // Provided user code.
-	
-	//
-	// Reset.
-	//
-	elseif( array_key_exists( kSESSION_PARAM_USER_LOGOUT, $_REQUEST ) )
-		$_SESSION[ kDEFAULT_SESSION ]->User( FALSE );
-	
-	//
-	// Load user.
-	//
-	if( array_key_exists( kSESSION_PARAM_USER_CODE, $_REQUEST )
-	 && array_key_exists( kSESSION_PARAM_USER_PASS, $_REQUEST ) )
-	{
-		//
-		// Look for user.
-		//
-		$found
-			= $_SESSION[ kDEFAULT_SESSION ]
-				->Login( $_REQUEST[ kSESSION_PARAM_USER_CODE ],
-						 $_REQUEST[ kSESSION_PARAM_USER_PASS ] );
-		if( $found )
-			$_SESSION[ kDEFAULT_SESSION ]
-				->User( $found );
-	
-	} // Provided credentials.
+	Handle_Login();
 }
 
 //
@@ -262,15 +206,27 @@ catch( Exception $error )
 							<li class="active"><a class="MyActiveTabColor" href="#">Home</a></li>
 
 			<!-- --------------------------------------------------------------------- --
-			  -- ABOUT TAB															   --
+			  -- ONTOLOGY TAB															   --
 			  -- --------------------------------------------------------------------- -->
-							<li class=""><a href="#about">About</a></li>
-
-			<!-- --------------------------------------------------------------------- --
-			  -- CONTACT TAB														   --
-			  -- --------------------------------------------------------------------- -->
-							<li class=""><a href="#contact">Contact</a></li>
+							<li class="dropdown" id="menu1">
+								<a class="dropdown-toggle" data-toggle="dropdown" href="#ontology_menu">
+									Ontology
+									<b class="caret"></b>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a href="#">Ontologies</a></li>
+									<li class="divider"></li>
+									<li><a href="#">Terms</a></li>
+									<li><a href="#">Nodes</a></li>
+									<li><a href="#">Tags</a></li>
+									<li class="divider"></li>
+									<li><a href="#">Graph</a></li>
+								</ul>
+							</li>
 							
+			<!-- --------------------------------------------------------------------- --
+			  -- DIVIDER TAB															   --
+			  -- --------------------------------------------------------------------- -->
 							<li class="divider-vertical"></li>
 						</ul>
 					</div><!--/.nav-collapse -->
@@ -283,8 +239,28 @@ catch( Exception $error )
 		  -- ------------------------------------------------------------------------- -->
 		<div class="container-fluid">
 
-			<h1>Bootstrap starter template</h1>
-			<p>Use this document as a way to quick start any new project.<br> All you get is this message and a barebones HTML document.</p>
+			<h1>This is a title placeholder</h1>
+			<p>The goal of agrobiodiversity conservation, unlike other forms of
+			   conservation, is not only the conservation of species and intra-specific
+			   genetic diversity related to agriculture, but also to promote its sustainable
+			   use in facilitating agricultural production. Although significant progress
+			   has been made in the conservation and management of plant genetic resources
+			   for food and  agriculture (PGRFA) globally and in Europe, there remain two
+			   critical areas where progress has been limited: (a) the use of  conserved
+			   agrobiodiversity by breeders and (b) the systematic conservation of crop wild
+			   relative (CWR) and landrace (LR)  diversity.
+			   <br />
+			   Specifically for breeders and CWR / LR diversity conservationists, the status
+			   quo is no longer an option as human-induced climate change is threatening the
+			   maintenance of the very diversity breeders require to mitigate the adverse
+			   impact of climate change.
+			   <br />
+			   Conventionally, breeders have used their own lines and stocks to generate
+			   novel crop varieties, but these  materials are relatively genetically
+			   uniform and it is now increasingly recognized that CWR and LR offer the
+			   breadth of genetic  diversity required by breeders to meet the novel
+			   challenges of climate change and rapidly changing consumer demands.
+			</p>
 			
 			<hr>
 			
