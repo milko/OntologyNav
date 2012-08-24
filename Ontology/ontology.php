@@ -9,12 +9,12 @@
  *	@subpackage	Site
  *
  *	@author		Milko A. Škofič <m.skofic@cgiar.org>
- *	@version	1.00 20/07/2012
+ *	@version	1.00 24/08/2012
  */
 
 /*=======================================================================================
  *																						*
- *										index.php										*
+ *									Ontology/ontology.php								*
  *																						*
  *======================================================================================*/
 
@@ -82,7 +82,7 @@ catch( Exception $error )
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Home page</title>
+		<title>Ontologies Management</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="">
 		<meta name="author" content="">
@@ -244,7 +244,7 @@ catch( Exception $error )
 			  -- --------------------------------------------------------------------- -->
 					<a data-bind="if: <?= kSESSION_NAV_FLAG_BRAND ?>"
 					   class="brand MyBrandColor" href="#">
-						EURISCO Data Warehouse
+						Manage ontologies
 					</a>
 					
 			<!-- --------------------------------------------------------------------- --
@@ -302,7 +302,7 @@ catch( Exception $error )
 			  -- ONTOLOGY TAB															   --
 			  -- --------------------------------------------------------------------- -->
 							<li data-bind="if: <?= kSESSION_NAV_FLAG_ONTOLOGY ?>"
-								class="dropdown" id="menu1">
+								class="dropdown active" id="menu1">
 								<a class="dropdown-toggle" data-toggle="dropdown" href="#ontology_menu">
 									Ontology
 									<b class="caret"></b>
@@ -336,27 +336,12 @@ catch( Exception $error )
 			<!-- --------------------------------------------------------------------- --
 			  -- MAIN CONTENT														   --
 			  -- --------------------------------------------------------------------- -->
-			<h1>Load your data in EURISCO</h1>
-			<p>The goal of agrobiodiversity conservation, unlike other forms of
-			   conservation, is not only the conservation of species and intra-specific
-			   genetic diversity related to agriculture, but also to promote its sustainable
-			   use in facilitating agricultural production. Although significant progress
-			   has been made in the conservation and management of plant genetic resources
-			   for food and  agriculture (PGRFA) globally and in Europe, there remain two
-			   critical areas where progress has been limited: (a) the use of  conserved
-			   agrobiodiversity by breeders and (b) the systematic conservation of crop wild
-			   relative (CWR) and landrace (LR)  diversity.
-			   <br />
-			   Specifically for breeders and CWR / LR diversity conservationists, the status
-			   quo is no longer an option as human-induced climate change is threatening the
-			   maintenance of the very diversity breeders require to mitigate the adverse
-			   impact of climate change.
-			   <br />
-			   Conventionally, breeders have used their own lines and stocks to generate
-			   novel crop varieties, but these  materials are relatively genetically
-			   uniform and it is now increasingly recognized that CWR and LR offer the
-			   breadth of genetic  diversity required by breeders to meet the novel
-			   challenges of climate change and rapidly changing consumer demands.
+			<h1>Ontologies management</h1>
+			<p>Through this page you can:
+				<ul>
+					<li>List your ontologies.
+					<li>Other stuff....
+				</ul>
 			</p>
 			
 			<!-- --------------------------------------------------------------------- --
@@ -369,7 +354,6 @@ catch( Exception $error )
 					<p><?php print_r( $_REQUEST ); ?></p>
 					<p><?php print_r( $_SESSION ); ?></p>
 				</pre>
-				<hr>
 			</div>
 			
 		<!-- ------------------------------------------------------------------------- --

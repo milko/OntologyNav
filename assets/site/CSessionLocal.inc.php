@@ -2,22 +2,21 @@
 
 /*=======================================================================================
  *																						*
- *									environment.inc.php									*
+ *								CSessionLocal.inc.php									*
  *																						*
  *======================================================================================*/
  
 /**
- *	Default environment definitions.
+ * {@link CSessionLocal CSessionLocal} definitions.
  *
- *	This file should be included at the top level of the application or web site, just after
- *	the <i>includes.inc.php</i>, it contains the runtime definitions that apply to the
- *	current application instance.
+ * This file contains common definitions used by the {@link CSessionLocal CSessionLocal}
+ * class.
  *
  *	@package	MyWrapper
- *	@subpackage	Run-time
+ *	@subpackage	Session
  *
- *	@author		Milko A. Skofic <m.skofic@cgiar.org>
- *	@version	1.00 12/07/2012
+ *	@author		Milko A. Škofič <m.skofic@cgiar.org>
+ *	@version	1.00 08/08/2012
  */
 
 /*=======================================================================================
@@ -39,8 +38,18 @@ define( "kDEFAULT_PATH",			"/Library/WebServer/Sites/development/OntologyNav/" )
  */
 define( "kDEFAULT_HOME",			"http://localhost/development/OntologyNav/" );
 
+/**
+ * Default session offset.
+ *
+ * This value is used as the default offset in which the current session
+ * {@link CSession object} will be stored.
+ *
+ * By default we set this value to the hash of the {@link kDEFAULT_HOME home}.
+ */
+define( "kDEFAULT_SESSION",			md5( "http://localhost/development/OntologyNav/" ) );
+
 /*=======================================================================================
- *	DEFAULT MODULE DEFINITION															*
+ *	SERVICE MODULE DEFINITION															*
  *======================================================================================*/
 
 /**
@@ -62,43 +71,48 @@ define( "kDEFAULT_WRAPPER",			"wrapper.php" );
 define( "kDEFAULT_DATABASE",		"WAREHOUSE" );
 
 /*=======================================================================================
- *	NEO4J CLIENT PARAMETERS																*
+ *	DEBUG SWITCH																		*
  *======================================================================================*/
 
 /**
- * Neo4j host.
+ * Default database name.
  *
- * This tag defines the default NEO4J host.
+ * This switch sets the debug status.
  *
- * Cardinality: one.
+ * Type: boolean.
  */
-define( "DEFAULT_kNEO4J_HOST",		'localhost' );
+define( "kDEFAULT_DEBUG",			FALSE );
+
+/*=======================================================================================
+ *	NAVIGATION BAR FLAG TAGS															*
+ *======================================================================================*/
 
 /**
- * Neo4j port.
+ * Page brand.
  *
- * This tag defines the default NEO4J port.
- *
- * Cardinality: one.
+ * This flag determines whether the page brand is visible or not, defaults to ON.
  */
-define( "DEFAULT_kNEO4J_PORT",		'7474' );
+define( "kSESSION_NAV_FLAG_BRAND",			'_localNavFlagBrand' );
 
 /**
- * Neo4j user.
+ * Page search field.
  *
- * This tag defines the default NEO4J user.
- *
- * Cardinality: one.
+ * This flag determines whether the page search field is visible or not, defaults to ON.
  */
-define( "DEFAULT_kNEO4J_USER",		NULL );
+define( "kSESSION_NAV_FLAG_SEARCH",			'_localNavFlagSearch' );
 
 /**
- * Neo4j password.
+ * Page dataset menu.
  *
- * This tag defines the default NEO4J user password.
- *
- * Cardinality: one.
+ * This flag determines whether the page dataset menu is visible or not, defaults to OFF.
  */
-define( "DEFAULT_kNEO4J_PASS",		NULL );
+define( "kSESSION_NAV_FLAG_DATASET",		'_localNavFlagDataset' );
+
+/**
+ * Page ontology menu.
+ *
+ * This flag determines whether the page ontology menu is visible or not, defaults to OFF.
+ */
+define( "kSESSION_NAV_FLAG_ONTOLOGY",		'_localNavFlagOntology' );
 
 ?>

@@ -1,4 +1,4 @@
-OntologyNav
-===========
+warehouse.eurisco.ecpgr.org
+===========================
 
-Ontology navigation and management web site.
+EURISCO Data Warehouse web site.
